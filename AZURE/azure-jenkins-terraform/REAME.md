@@ -1,5 +1,4 @@
-markdown
-Copy code
+
 # Jenkins on Azure Virtual Machine with Terraform
 
 This project automates the deployment of a Jenkins server on an Ubuntu virtual machine (VM) in Microsoft Azure using Terraform. The VM is configured with Jenkins installed and set up to run as a service.
@@ -47,36 +46,37 @@ After running the script, the public IP address of the Jenkins server will be di
 
 How to Use
 ### Step 1: Clone the repository
-bash
-Copy code
+```
 git clone <repository_url>
 cd <repository_directory>
+```
+
 ### Step 2: Initialize Terraform
-bash
-Copy code
+```
 terraform init
+```
 This command will download the required providers and modules.
 
 ### Step 3: Configure Your Azure Credentials
 Authenticate using the Azure CLI:
 
-bash
-Copy code
+```
 az login
+```
 Make sure you have set the correct subscription:
 
-bash
-Copy code
+```
 az account set --subscription "<SUBSCRIPTION_ID>"
+```
 Alternatively, configure a service principal in the Terraform provider block.
 
 ### Step 4: Update Variables (Optional)
 Edit the main.tf file to adjust any settings such as the region (location), VM size (size), and SSH key.
 
 ### Step 5: Apply the Terraform Configuration
-bash
-Copy code
+```
 terraform apply
+```
 Terraform will prompt you to confirm the changes. Type yes to proceed.
 
 ### Step 6: Access Jenkins
