@@ -103,5 +103,6 @@ To destroy the resources created by Terraform, run:
 
 ```
 terraform destroy
-This will remove all resources created by the Terraform script.
 ```
+This will remove all resources created by the Terraform script.
+
