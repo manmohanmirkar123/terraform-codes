@@ -1,6 +1,10 @@
 pipeline {
     agent any
-
+     environment {
+        // Load both the access key and secret key as environment variables for Terraform
+        AWS_ACCESS_KEY_ID     = credentials('TERRAFORM_VPC_ACCESS_KEY')    // Access key ID from Jenkins credentials
+        AWS_SECRET_ACCESS_KEY = credentials('TERRAFORM_VPC_SECRET_KEY')    // Secret access key from Jenkins credentials
+    }
     stages {
         stage('User Input') {
             steps {
