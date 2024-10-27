@@ -1,0 +1,63 @@
+pipeline {
+    agent any
+
+    stages {
+        stage('User Input') {
+            steps {
+                script {
+                    // Ask the user for input with dropdown choices for region, environment, VPC CIDR, and subnet CIDR
+                    def userInput = input(
+                        id: 'userInput', message: 'Please select the configuration options:',
+                        parameters: [
+                            choice(name: 'REGION', choices: ['us-east-1', 'us-west-2', 'eu-west-1'], description: 'Select AWS region'),
+                            choice(name: 'ENV', choices: ['dev', 'staging', 'production'], description: 'Select environment'),
+                            choice(name: 'VPC_CIDR', choices: ['10.0.0.0/16', '10.1.0.0/16', '192.168.0.0/16'], description: 'Select VPC CIDR block'),
+                            choice(name: 'SUBNET_CIDR', choices: ['10.0.1.0/24', '10.1.1.0/24', '192.168.1.0/24'], description: 'Select subnet CIDR block')
+                        ]
+                    )
+
+                    // Set chosen values to environment variables
+                    env.TF_VAR_region = userInput['REGION']
+                    env.ENVIRONMENT = userInput['ENV']
+                    env.TF_VAR_vpc_cidr = userInput['VPC_CIDR']
+                    env.TF_VAR_subnet_cidr = userInput['SUBNET_CIDR']
+                }
+            }
+        }
+
+        stage('Checkout') {
+            steps {
+                // Check out the Terraform code from version control
+                git url: 'https://your-repo-url.git', branch: 'main'
+            }
+        }
+
+        stage('Terraform Init') {
+            steps {
+                // Initialize Terraform
+                sh 'terraform init'
+            }
+        }
+
+        stage('Terraform Plan') {
+            steps {
+                // Run Terraform plan with the selected parameters
+                sh 'terraform plan -var "vpc_cidr=${TF_VAR_vpc_cidr}" -var "subnet_cidr=${TF_VAR_subnet_cidr}" -var "region=${TF_VAR_region}" -var "environment=${ENVIRONMENT}"'
+            }
+        }
+
+        stage('Terraform Apply') {
+            steps {
+                // Apply Terraform changes
+                sh 'terraform apply -auto-approve -var "vpc_cidr=${TF_VAR_vpc_cidr}" -var "subnet_cidr=${TF_VAR_subnet_cidr}" -var "region=${TF_VAR_region}" -var "environment=${ENVIRONMENT}"'
+            }
+        }
+    }
+
+    post {
+        always {
+            // Clean up Terraform state or lock files
+            cleanWs()
+        }
+    }
+}
