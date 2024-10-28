@@ -33,13 +33,19 @@ pipeline {
             steps {
                 // Check out the Terraform code from version control
                 git url: 'https://github.com/manmohanmirkar123/terraform-codes.git', branch: 'main'
-                sh 'cd terraform-codes/AWS/jenkins-terraform'
+                sh 'pwd'
+                sh 'ls -ltr'
+                sh 'cp AWS/jenkins-terraform/main.tf .'
+                sh 'pwd'
+                sh 'ls -ltr'
             }
         }
 
         stage('Terraform Init') {
             steps {
                 // Initialize Terraform
+                sh 'pwd'
+                sh 'ls -ltr'
                 sh 'terraform init'
             }
         }
