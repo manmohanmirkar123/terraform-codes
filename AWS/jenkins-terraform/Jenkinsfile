@@ -32,7 +32,7 @@ pipeline {
         stage('Checkout') {
             steps {
                 // Check out the Terraform code from version control
-                git url: 'https://your-repo-url.git', branch: 'main'
+                git url: 'https://github.com/manmohanmirkar123/terraform-codes.git, branch: 'main'
             }
         }
 
